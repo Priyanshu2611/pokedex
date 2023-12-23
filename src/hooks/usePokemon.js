@@ -1,9 +1,16 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import downloadPokemons from "../utils/downloadPokemons";
 function usePokemon(id) {
     const [pokemon,setPokemon]= useState(null);
+    const [pokemonListState , setPokemonListState] = useState({
+        pokemonList : [],
+        pokedexUrl : '',
+        nextUrl : '',
+        prevUrl : ''
+    });
 
-    async function downloadPokemon(id){
+    async function downloadGivenPokemon(id){
         const POKEMON_DETAIL_URL = `https://pokeapi.co/api/v2/pokemon/`
         const response = await axios.get(POKEMON_DETAIL_URL + id);
         const pokemon = response.data;
@@ -14,12 +21,21 @@ function usePokemon(id) {
             types : pokemon.types,
             image : pokemon.sprites.other.dream_world.front_default
         });
+        const types = response.data.types.map(t => t.type.name)
+        return types[0];
     }
-    useEffect(()=>{
-        downloadPokemon(id);
-    },[]);
+    async function downloadPokemonAndRelated(id){
+        const type = await downloadGivenPokemon(id);
+        await downloadPokemons(pokemonListState, setPokemonListState, `https://pokeapi.co/api/v2/type/${type}`);
 
-    return [pokemon];
+    }
+
+    useEffect(()=>{
+        downloadPokemonAndRelated(id);
+        window.scrollTo({top : 0, left : 0, behavior : 'smooth'});
+    },[id]);
+
+    return [pokemon, pokemonListState];
 }
 
 export default usePokemon;
