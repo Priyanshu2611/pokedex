@@ -10,6 +10,9 @@
     align-items: center;
 }
 
+.pokemon-list-wrapper h1{
+    font-size: xx-large;
+}
 .page-controls button{
     padding: 10px 2rem;
     margin-left: 1rem;

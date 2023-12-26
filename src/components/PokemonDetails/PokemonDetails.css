@@ -41,6 +41,12 @@
     margin-top: 3rem;
 }
 
+.similar-pokemons h2{
+    font-size: xx-large;
+    letter-spacing: 5px;
+    text-decoration: underline;
+}
+
 .pokemon-similar-boxes{
     display: flex;
     flex-direction: row;
